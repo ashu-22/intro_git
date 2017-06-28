@@ -1,0 +1,17 @@
+Node n = new Node;
+Node n1;
+Node n2;
+Node n1 = new Node(n1);
+Node n2 = new Node(n2);
+if(n1 > n2)
+{
+System.out.print("n1: ");
+}
+else(n2 < n1)
+{
+System.out.print("n2: ");
+}
+else if(n2 != n1)
+{
+System.out.println("!n1");
+}
