@@ -1,0 +1,35 @@
+public class Stack
+{
+public static void main(String...args)
+{
+Stack st = new Stack();
+Stack.push();
+Stack.pop();
+Stack.isEmpty();
+Stack.isDelete();
+}
+}
+for(int i = 0; i < Stack.length1; i++)
+{
+for(int j = 0; j < Stack.length2; j++)
+{
+if(Stack.length1 > Stack.length2)
+{
+System.out.print("Push the Stack");
+}
+else if(Stack.length1 < Stack.length2)
+{
+System.out.print("Pop the Stack");
+}
+else(Stack1.length != Stack2.length)
+{
+System.out.println("Empty the Stack");
+}
+for(int i : i)
+{
+i(stack.isDelete > Delete)
+{
+System.out.println("IsDelete the Stack");
+}
+}
+}
