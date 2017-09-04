@@ -1,0 +1,109 @@
+Now let’s configure your Git installation so other folks who might be working on projects with you know who’s doing all of the great work coming from your computer.
+Setup Github
+“GitHub is a web-based hosting service for software development projects that use the Git revision control system.”
+Go to Github.com and create a free account if you haven’t already.
+Github Keychain Helper
+To save time in the future, we’ll install a utility that will allow your computer to authenticate with Github automatically instead of having to enter your username/password during each session.
+First, check if the helper is installed by typing git credential-osxkeychain into the terminal.
+
+If the helper is installed, the terminal will give you instructions on how to use it:
+1
+Usage: git credential-osxkeychain <get|store|erase>
+If see the above message, you are now able to access Git repositories using the HTTPS method. There’s a very good chance that this is the only method you will need to access repositories and you can move on to my final notes.
+If you don’t have the keychain helper already installed, you’ll see this instead:
+1
+git: 'credential-osxkeychain' is not a git command. See 'git --help'.
+To install the keychain helper, execute the following commands:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+# Download the keychain helper
+$ curl -s -O http://github-media-downloads.s3.amazonaws.com/osx/git-credential-osxkeychain
+# Modify permissions on the helper so it can operate
+$ chmod u+x git-credential-osxkeychain
+# Move the helper so Git can access it. This command will ask you for your (computer user) password. As you're typing your password, it won't show the characters, press return when done typing it.
+$ sudo mv git-credential-osxkeychain /usr/local/git/bin
+# Tells Git to use the helper
+$ git config --global credential.helper osxkeychain
+# Check again to see if the helper is successfully installed
+$ git credential-osxkeychain
+Once again, if the helper has been installed successfully, the terminal will give you instructions on how to use it:
+1
+Usage: git credential-osxkeychain <get|store|erase>
+If see the above message, you are now able to access Git repositories using the HTTPS method. There’s a very good chance that this is the only method you will need to access repositories and you can move on to my final notes.
+If you don’t see the above message, you hit a snag along the way. Try going through the keychain helper install steps again.
+Otherwise, if you have a specific reason that you need to access Git repositories using SSH, proceed to SSH Keys.
+SSH Keys (optional step)
+
+“SSH uses public-key cryptography to authenticate the remote computer and allow it to authenticate the user, if necessary. There are several ways to use SSH; one is to use automatically generated public-private key pairs to simply encrypt a network connection, and then use password authentication to log on.”
+An SSH key basically lets your computer uniquely identify itself when it connects to servers. If Github is aware of the key your computer is using, you won’t have to enter your Github username/password every time you connect.
+Check for pre-existing SSH keys on your computer
+Let’s see if your computer has one or more keys already installed:
+# Point the terminal to the directory that would contain SSH keys for your user account.
+$ cd ~/.ssh
+If you get the response “No such file or directory”, skip to Generate a new SSH Key.
+Otherwise, you’ll need to backup and remove your existing SSH keys.
+Backup and remove your existing SSH keys.
+
+# Ensure that you are in your ~/.ssh folder
+$ cd ~/.ssh
+
+# Make a subdirectory called "key_backup" in the current directory
+$ mkdir key_backup
+
+# Copies the id_rsa keypair into key_backup
+$ cp id_rsa* key_backup
+
+# Deletes the id_rsa keypair in your ~/.ssh directory
+$ rm id_rsa*
+Generate a new SSH key
+
+Now we’ll create a new SSH key to use with Github.
+
+# Ensure that you are in your ~/.ssh folder
+$ cd ~/.ssh
+# Create a new ssh key using the provided email. The email you use in this step should match the one you entered when you created your Github account
+$ ssh-keygen -t rsa -C "your_email@domain.com"
+When it asks you to enter a file name in which to save the key, just press return/enter (leave the prompt blank).
+You will then be asked to enter a passphrase and confirm it. Don’t make this blank, and don’t make it an easily guessable. This prevents someone from easily acquiring and using your SSH key to impersonate you. Don’t worry, you won’t have to enter this key much (if at all) after initial setup.
+Press return after each time you’ve entered your selected passphrase. You won’t see the characters or bullets, the cursor will stay in the same spot as if you aren’t typing.
+If you make an error entering your password one of the times, just press return and it will prompt you to try again.
+Once you’ve successfully set your passphrase, the terminal will report that your key has been saved and will present you with some sweet ASCII art.
+Add your SSH key to Github
+In order for your computer to access Github without you having to enter your username/password all the time, Github needs to know the contents of the SSH key you just generated.
+
+# The below command will copy your newly generated key to your computer's clipboard.
+$ pbcopy < ~/.ssh/id_rsa.pub
+Now we’ll add your key to Github:
+Visit your account settings.
+Click Add SSH key.
+Enter a descriptive title for the computer you’re currently on, e.g. “Work iMac” into the Title field.
+Paste your key into the Key field (it has already been copied to your clipboard).
+Click Add Key.
+Enter your Github password.
+Now let’s test that it all worked.
+
+ # Attempts to connect to Github using your SSH key.
+ # Don't change the address shown below
+ $ ssh -T git@github.com
+ # You may see the following warning:
+ The authenticity of host 'github.com (207.97.227.239)'
+ cant be established.
+ RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+ Are you sure you want to continue connecting (yes/no)?
+ # Type yes and press return
+ # You may have to enter your recently selected passphrase.
+ # You should then see:
+ Hi username! You've successfully authenticated,
+ but GitHub does not provide shell access.
